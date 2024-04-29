@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import {
+  Dimensions,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -14,9 +16,16 @@ import PopulerItems from "@/components/populerItems";
 import Foods from "@/components/foods";
 import Drink from "@/components/drinks";
 import { StatusBar } from "expo-status-bar";
+import Today from "./Today";
+import Offer from "./Offer";
+import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+
+const { width: dwidth } = Dimensions.get("window");
+
 
 const Home = ({ navigation }: { navigation: { navigate: any } }) => {
-
+  const [screen, setScreen] = useState(1);
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar translucent backgroundColor="transparent" />
@@ -47,15 +56,46 @@ const Home = ({ navigation }: { navigation: { navigate: any } }) => {
         >
           <Swiper />
 
-          <Text style={styles.heading}>Populer Items</Text>
-          <PopulerItems navigation={navigation} />
+          <ScrollView>
+            <View style={{ width: "100%", flex: 1, marginTop: 10, }}>
+              <View style={{ width: "100%", flex: 0.2, backgroundColor: "black" }} />
+              <View
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
+                  gap: 7,
+                  paddingHorizontal: 7,
+                }}
+              >
+                <TouchableOpacity style={[
+                  styles.tabStyles,
+                  screen === 1 ? styles.activeTabIndicator : styles.notSelectTab,
+                ]}
+                  onPress={() => setScreen(1)}>
+                  <Text style={styles.textmenu}>Today Special  <FontAwesome5 name="hotjar" size={14} color="orange" /></Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[
+                  styles.tabStyles,
+                  screen === 2 ? styles.activeTabIndicator : styles.notSelectTab,
+                ]}
+                  onPress={() => setScreen(2)}>
+                  <Text style={styles.textmenu}>Offers   <MaterialIcons name="local-offer" size={14} color="orange" /></Text>
+                </TouchableOpacity>
 
-          <Text style={styles.heading}>Foods</Text>
-          <Foods navigation={navigation} />
+              </View>
+              {screen === 1 ? (
+                <Today navigation={navigation} />
+              ) : screen === 2 ? (
+                <Offer />
+              ) : null}
+            </View>
 
 
-          <Text style={styles.heading}>Drinks</Text>
-          <Drink navigation={navigation} />
+
+
+          </ScrollView>
+
+
 
         </ScrollView>
       </View>
@@ -64,6 +104,45 @@ const Home = ({ navigation }: { navigation: { navigate: any } }) => {
 };
 
 const styles = StyleSheet.create({
+  notSelectTab: {
+    borderBottomWidth: 3,
+    borderBottomColor: '#d9dfe4',
+
+
+  },
+
+  textmenu: {
+    fontSize: 15,
+    fontWeight: '500'
+
+  },
+
+  container: {
+
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 30,
+
+  },
+  tabStyles: {
+    width: Number(((dwidth) / 2).toFixed(0)),
+    paddingVertical: 5,
+    paddingHorizontal: 7,
+    alignItems: 'center',
+
+
+  },
+
+  activeTabIndicator: {
+    borderBottomWidth: 3,
+    borderBottomColor: 'orange',
+
+  },
+
 
   cardContainer: {
     flexDirection: "row",
